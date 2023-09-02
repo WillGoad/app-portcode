@@ -34,9 +34,10 @@ export default function Onboarding() {
 
     //Use effect only runs once
     useEffect(() => {
-        if (params.get("verify")) {
+        if (params.get("verify") && params.get("email")) {
             setCurrentTab("confirmation");
             setCode(params.get("verify") || "");
+            setEmail(params.get("email") || "");
         }
     }, []);
 
@@ -103,7 +104,7 @@ export default function Onboarding() {
     //Function for when the user clicks the send code button
     const onSendCode = () => {
         //Check email is valid
-        if (email.length > 0 && email.includes("@") && email.includes(".") && email.length > 5 && name.length > 1) {
+        if (email.includes("@") && email.includes(".") && email.length > 5 && name.length > 1) {
             console.log("Email is valid")
             onSignupVerify();
         }
@@ -111,7 +112,7 @@ export default function Onboarding() {
 
     //Function for when user clicks submit Code button
     const onSubmitCode = () => {
-        if (code.length === 6) {
+        if (code.length === 6&& email.includes("@") && email.includes(".") && email.length > 5) {
             console.log("Code is valid");
             onSignup();
         }
