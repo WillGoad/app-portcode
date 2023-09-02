@@ -88,7 +88,7 @@ export default function Onboarding() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ code, email, name }),
+                body: JSON.stringify({ code, email }),
             });
             const data = response.json();
             //If status code 200 then change tab
