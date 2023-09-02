@@ -7,9 +7,9 @@ export const SurveyRadioGroup = () => {
     return (
         <RadioGroup defaultValue="card" className="grid grid-cols-2 gap-4">
             <div>
-                <RadioGroupItem value="card" id="card" className="peer sr-only" />
+                <RadioGroupItem value="developer" id="developer" className="peer sr-only" />
                 <Label
-                    htmlFor="card"
+                    htmlFor="developer"
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                     <svg
@@ -30,12 +30,12 @@ export const SurveyRadioGroup = () => {
             </div>
             <div>
                 <RadioGroupItem
-                    value="paypal"
-                    id="paypal"
+                    value="designer"
+                    id="designer"
                     className="peer sr-only"
                 />
                 <Label
-                    htmlFor="paypal"
+                    htmlFor="designer"
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                     <Icons.paypal className="mb-3 h-6 w-6" />
@@ -43,9 +43,9 @@ export const SurveyRadioGroup = () => {
                 </Label>
             </div>
             <div>
-                <RadioGroupItem value="apple" id="apple" className="peer sr-only" />
+                <RadioGroupItem value="creator" id="creator" className="peer sr-only" />
                 <Label
-                    htmlFor="apple"
+                    htmlFor="creator"
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                     <Icons.apple className="mb-3 h-6 w-6" />
@@ -53,9 +53,9 @@ export const SurveyRadioGroup = () => {
                 </Label>
             </div>
             <div>
-                <RadioGroupItem value="apple" id="apple" className="peer sr-only" />
+                <RadioGroupItem value="other" id="other" className="peer sr-only" />
                 <Label
-                    htmlFor="apple"
+                    htmlFor="other"
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                     <Icons.apple className="mb-3 h-6 w-6" />
