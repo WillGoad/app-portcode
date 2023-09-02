@@ -1,7 +1,7 @@
 'use client';
 
 //Convert to client component
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -15,10 +15,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { SurveyRadioGroup } from "@/components/misc/survey-radio-group";
+import { useSearchParams } from 'next/navigation'
 
 
 
 export default function Onboarding() {
+    const params = useSearchParams();
     //First Tab
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -28,6 +31,14 @@ export default function Onboarding() {
     const [confirmationTabDisabled, setConfirmationDisabled] = useState(true);
     const [surveyTabDisabled, setSurveyDisabled] = useState(true);
     const [currentTab, setCurrentTab] = useState("email"); //["email", "confirmation", "survey"]
+
+    //Use effect only runs once
+    useEffect(() => {
+        if (params.get("verify")) {
+            setCurrentTab("confirmation");
+            setCode(params.get("verify") || "");
+        }
+    }, []);
 
     //Function for changing enabled tab
     const setEnabledTab = (tab: string) => {
@@ -51,7 +62,7 @@ export default function Onboarding() {
 
     const onSignupVerify = async () => {
         try {
-            const response = await fetch('https://portcode.onrender.com/api/auth/signup-verify', {
+            const response = await fetch('https://api.portco.de/api/auth/signup-verify', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +82,7 @@ export default function Onboarding() {
 
     const onSignup = async () => {
         try {
-            const response = await fetch('https://portcode.onrender.com/api/auth/signup', {
+            const response = await fetch('https://api.portco.de/api/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -100,7 +111,7 @@ export default function Onboarding() {
 
     //Function for when user clicks submit Code button
     const onSubmitCode = () => {
-        if(code.length === 6) {
+        if (code.length === 6) {
             console.log("Code is valid");
             onSignup();
         }
@@ -149,7 +160,7 @@ export default function Onboarding() {
                             <CardContent className="space-y-2">
                                 <div className="space-y-1">
                                     <Label htmlFor="name">Code</Label>
-                                    <Input id="name" value={code} onChange={e => setCode(e.target.value)}/>
+                                    <Input id="name" value={code} onChange={e => setCode(e.target.value)} />
                                 </div>
                             </CardContent>
                             <CardFooter>
@@ -166,6 +177,7 @@ export default function Onboarding() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-2">
+                                <SurveyRadioGroup />
                                 <div className="space-y-1">
                                     <Label htmlFor="name">Name</Label>
                                     <Input id="name" defaultValue="Pedro Duarte" />
