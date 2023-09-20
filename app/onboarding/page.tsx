@@ -30,7 +30,7 @@ export default function Onboarding() {
     const [emailTabDisabled, setEmailDisabled] = useState(false);
     const [confirmationTabDisabled, setConfirmationDisabled] = useState(true);
     const [surveyTabDisabled, setSurveyDisabled] = useState(true);
-    const [currentTab, setCurrentTab] = useState("email"); //["email", "confirmation", "survey"]
+    const [currentTab, setCurrentTab] = useState("survey"); //["email", "confirmation", "survey"]
 
     //Use effect only runs once
     useEffect(() => {
@@ -178,7 +178,7 @@ export default function Onboarding() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-2">
-                                <SurveyRadioGroup />
+                                <SurveyRadioGroup optionsArray={["developer", "designer", "creator", "other"]}/>
                                 <div className="space-y-1">
                                     <Label htmlFor="name">Name</Label>
                                     <Input id="name" defaultValue="Pedro Duarte" />
