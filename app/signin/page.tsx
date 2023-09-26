@@ -14,9 +14,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useSearchParams } from 'next/navigation'
-import { USER_TOKEN } from "@lib/constants";
-import { setCookie } from "cookies-next";
 import { AccountIndicator } from "@/components/ui/account-indicator";
+import { setUserCookies } from "@lib/utils";
 
 
 export default function Onboarding() {
@@ -48,7 +47,7 @@ export default function Onboarding() {
             setConfirmationDisabled(false);
             setCurrentTab("confirmation");
         }
-    }
+    }    
 
     const onSigninVerify = async () => {
         try {
@@ -83,9 +82,7 @@ export default function Onboarding() {
             if (response.status === 200) {
                 setEnabledTab("survey");
                 const data = await response.json();
-                setCookie(USER_TOKEN, data.accessToken, {
-                    maxAge: 60 * 60 * 24 * 30, // 30 Days in seconds
-                  })
+                setUserCookies(data.displayname, data.email, data.accessToken);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -113,7 +110,7 @@ export default function Onboarding() {
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
             
             <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center gap-4">
-                <AccountIndicator />
+                <AccountIndicator page="signin"/>
                 <Tabs activationMode="automatic" value={currentTab} className="w-[400px]">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger disabled={emailTabDisabled} value="email">Email</TabsTrigger>
