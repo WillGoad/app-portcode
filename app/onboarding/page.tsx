@@ -10,13 +10,11 @@ import {
     CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SurveyRadioGroup } from "@/components/misc/survey-radio-group";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter  } from 'next/navigation'
 import { AccountIndicator } from "@/components/ui/account-indicator";
 import { setUserCookies } from "@lib/utils";
 
@@ -30,8 +28,7 @@ export default function Onboarding() {
     //Enabled bool values for each tab
     const [emailTabDisabled, setEmailDisabled] = useState(false);
     const [confirmationTabDisabled, setConfirmationDisabled] = useState(true);
-    const [surveyTabDisabled, setSurveyDisabled] = useState(true);
-    const [currentTab, setCurrentTab] = useState("email"); //["email", "confirmation", "survey"]
+    const [currentTab, setCurrentTab] = useState("email"); //["email", "confirmation"]
 
     //Use effect only runs once
     useEffect(() => {
@@ -47,17 +44,14 @@ export default function Onboarding() {
         if (tab === "email") {
             setEmailDisabled(false);
             setConfirmationDisabled(true);
-            setSurveyDisabled(true);
             setCurrentTab("email");
         } else if (tab === "confirmation") {
             setEmailDisabled(true);
             setConfirmationDisabled(false);
-            setSurveyDisabled(true);
             setCurrentTab("confirmation");
         } else if (tab === "survey") {
             setEmailDisabled(true);
             setConfirmationDisabled(true);
-            setSurveyDisabled(false);
             setCurrentTab("survey");
         }
     }
@@ -93,9 +87,9 @@ export default function Onboarding() {
             });
             //If status code 200 then change tab
             if (response.status === 200) {
-                setEnabledTab("survey");
                 const data = await response.json();
                 setUserCookies(data.displayname, data.email, data.accessToken);
+                // router.push('/')
             }
         } catch (error) {
             console.error('Error:', error);
@@ -124,15 +118,13 @@ export default function Onboarding() {
             <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center  gap-4">
                 <AccountIndicator page="signup" />
                 <Tabs activationMode="automatic" value={currentTab} className="w-[400px]">
-                    <TabsList className="grid w-full grid-cols-3">
+                    <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger disabled={emailTabDisabled} value="email">Email</TabsTrigger>
                         <TabsTrigger disabled={confirmationTabDisabled} value="confirmation">Confirm</TabsTrigger>
-                        <TabsTrigger disabled={surveyTabDisabled} value="survey">Survey</TabsTrigger>
                     </TabsList>
                     <TabsContent value="email">
                         <Card>
                             <CardHeader>
-                                <CardTitle>1 of 3</CardTitle>
                                 <CardDescription>
                                     Add an email to use with your account. We&apos;ll send you a code to confirm it&apos;s you.
                                 </CardDescription>
@@ -155,7 +147,6 @@ export default function Onboarding() {
                     <TabsContent value="confirmation">
                         <Card>
                             <CardHeader>
-                                <CardTitle>2 of 3</CardTitle>
                                 <CardDescription>
                                     Enter the code we sent to your email. Make sure to check your spam folder.
                                 </CardDescription>
@@ -168,30 +159,6 @@ export default function Onboarding() {
                             </CardContent>
                             <CardFooter>
                                 <Button onClick={() => onSubmitCode()}>Submit</Button>
-                            </CardFooter>
-                        </Card>
-                    </TabsContent>
-                    <TabsContent value="survey">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>3 of 3</CardTitle>
-                                <CardDescription>
-                                    Make changes to your account here. Click save when you&apos;re done.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                                <SurveyRadioGroup optionsArray={["developer", "designer", "creator", "other"]} />
-                                <div className="space-y-1">
-                                    <Label htmlFor="name">Name</Label>
-                                    <Input id="name" defaultValue="Pedro Duarte" />
-                                </div>
-                                <div className="space-y-1">
-                                    <Label htmlFor="username">Username</Label>
-                                    <Input id="username" defaultValue="@peduarte" />
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button>Save changes</Button>
                             </CardFooter>
                         </Card>
                     </TabsContent>

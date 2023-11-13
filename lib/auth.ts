@@ -26,7 +26,8 @@ export async function verifyAuth(req: NextRequest) {
       )
       return verified.payload as UserJwtPayload
     } catch (err) {
-      throw new AuthError('Your token has expired.')
+      console.error(err)
+      throw new AuthError('An error occurred while verifying the token.')
     }
   }
   

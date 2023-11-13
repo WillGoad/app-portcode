@@ -12,20 +12,16 @@ interface AccountIndicatorProps {
 
 
 export const AccountIndicator = (props: AccountIndicatorProps) => {
-    const JWT = getCookie(USER_TOKEN);
-    const username = getCookie(DISPLAY_NAME);
 
     return (
         <Button
-            asChild={!JWT && !username && true}
+            asChild={true}
             variant="outline"
             role="combobox"
             className="w-[120px] justify-center gap-5"
         >
 
-            {JWT && username ? <>{username}<Avatar className="w-auto h-auto">
-                <Icons.circleUser />
-            </Avatar></> : props.page === "signin" ? <Link href="/onboarding">Sign up</Link> : <Link href="/signin">Sign in</Link>}
+            {props.page === "signin" ? <Link href="/onboarding">Sign up</Link> : <Link href="/signin">Sign in</Link>}
         </Button>
     );
 }
