@@ -2,29 +2,29 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Icons } from "@/components/ui/icons"
 import { Label } from "@/components/ui/label"
 
+type IconName = keyof typeof Icons;
 
-export const SurveyRadioGroup = () => {
+type SurveyRadioGroupType = {
+    optionsArray: string[];
+}
+
+export const SurveyRadioGroup = (props: SurveyRadioGroupType) => {
+    const IconNameArray = Object.keys(Icons).filter(key => props.optionsArray.includes(key)) as IconName[];
+    const FirstIcon = Icons[IconNameArray[0]];
+    const SecondIcon = Icons[IconNameArray[1]];
+    const ThirdIcon = Icons[IconNameArray[2]];
+    const FourthIcon = Icons[IconNameArray[3]];
+
     return (
         <RadioGroup defaultValue="card" className="grid grid-cols-2 gap-4">
             <div>
-                <RadioGroupItem value="developer" id="developer" className="peer sr-only" />
+                <RadioGroupItem value={props.optionsArray[0]} id={props.optionsArray[0]} className="peer sr-only" />
                 <Label
-                    htmlFor="developer"
+                    htmlFor={props.optionsArray[0]}
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        className="mb-3 h-6 w-6"
-                    >
-                        <rect width="20" height="14" x="2" y="5" rx="2" />
-                        <path d="M2 10h20" />
-                    </svg>
+                    <FirstIcon className="mb-3 h-6 w-6" />
+
                     Developer
                 </Label>
             </div>
@@ -38,7 +38,7 @@ export const SurveyRadioGroup = () => {
                     htmlFor="designer"
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
-                    <Icons.paypal className="mb-3 h-6 w-6" />
+                    <SecondIcon className="mb-3 h-6 w-6" />
                     Designer
                 </Label>
             </div>
@@ -48,7 +48,7 @@ export const SurveyRadioGroup = () => {
                     htmlFor="creator"
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
-                    <Icons.apple className="mb-3 h-6 w-6" />
+                    <ThirdIcon className="mb-3 h-6 w-6" />
                     Creator
                 </Label>
             </div>
@@ -58,7 +58,7 @@ export const SurveyRadioGroup = () => {
                     htmlFor="other"
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
-                    <Icons.apple className="mb-3 h-6 w-6" />
+                    <FourthIcon className="mb-3 h-6 w-6" />
                     Other
                 </Label>
             </div>
