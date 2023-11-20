@@ -15,19 +15,7 @@ export function MainNav({
         href="/examples/dashboard"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
-        Overview
-      </Link>
-      <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Customers
-      </Link>
-      <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Products
+        Live Editor
       </Link>
       <Link
         href="/examples/dashboard"
@@ -37,4 +25,4 @@ export function MainNav({
       </Link>
     </nav>
   )
-}
+} 

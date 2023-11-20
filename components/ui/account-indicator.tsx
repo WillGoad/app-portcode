@@ -1,15 +1,9 @@
-import { getCookie } from 'cookies-next';
-
 import { Button } from "@/components/ui/button"
-import { Avatar } from "@/components/ui/avatar"
-import { Icons } from "@/components/ui/icons"
-import { DISPLAY_NAME, USER_TOKEN } from '@lib/constants';
 import Link from "next/link"
 
 interface AccountIndicatorProps {
     page: string;
 }
-
 
 export const AccountIndicator = (props: AccountIndicatorProps) => {
 

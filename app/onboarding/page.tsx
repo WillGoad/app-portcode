@@ -2,7 +2,6 @@
 
 //Convert to client component
 import { useState, useEffect } from "react";
-
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -14,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useSearchParams, useRouter  } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { AccountIndicator } from "@/components/ui/account-indicator";
 import { setUserCookies } from "@lib/utils";
 
@@ -29,6 +28,7 @@ export default function Onboarding() {
     const [emailTabDisabled, setEmailDisabled] = useState(false);
     const [confirmationTabDisabled, setConfirmationDisabled] = useState(true);
     const [currentTab, setCurrentTab] = useState("email"); //["email", "confirmation"]
+    const router = useRouter();
 
     //Use effect only runs once
     useEffect(() => {
@@ -65,12 +65,10 @@ export default function Onboarding() {
                 },
                 body: JSON.stringify({ name, email }),
             });
-            const data = response.json();
             //If status code 200 then change tab
             if (response.status === 200) {
                 setEnabledTab("confirmation");
             }
-            console.log(data);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -88,8 +86,8 @@ export default function Onboarding() {
             //If status code 200 then change tab
             if (response.status === 200) {
                 const data = await response.json();
-                setUserCookies(data.displayname, data.email, data.accessToken);
-                // router.push('/')
+                setUserCookies(data.username, data.displayname,  data.email, data.accessToken);
+                router.push("/")
             }
         } catch (error) {
             console.error('Error:', error);
@@ -98,9 +96,7 @@ export default function Onboarding() {
 
     //Function for when the user clicks the send code button
     const onSendCode = () => {
-        //Check email is valid
         if (email.includes("@") && email.includes(".") && email.length > 5 && name.length > 1) {
-            console.log("Email is valid")
             onSignupVerify();
         }
     }
@@ -108,7 +104,6 @@ export default function Onboarding() {
     //Function for when user clicks submit Code button
     const onSubmitCode = () => {
         if (code.length === 6 && email.includes("@") && email.includes(".") && email.length > 5) {
-            console.log("Code is valid");
             onSignup();
         }
     }

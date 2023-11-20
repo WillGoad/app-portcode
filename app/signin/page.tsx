@@ -2,7 +2,7 @@
 
 //Convert to client component
 import { useState, useEffect } from "react";
-
+import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -26,6 +26,7 @@ export default function Onboarding() {
     const [emailTabDisabled, setEmailDisabled] = useState(false);
     const [confirmationTabDisabled, setConfirmationDisabled] = useState(true);
     const [currentTab, setCurrentTab] = useState("email"); //["email", "confirmation"]
+    const router = useRouter();
 
     //Use effect only runs once
     useEffect(() => {
@@ -47,7 +48,7 @@ export default function Onboarding() {
             setConfirmationDisabled(false);
             setCurrentTab("confirmation");
         }
-    }    
+    }
 
     const onSigninVerify = async () => {
         try {
@@ -58,12 +59,10 @@ export default function Onboarding() {
                 },
                 body: JSON.stringify({ email }),
             });
-            const data = response.json();
             //If status code 200 then change tab
             if (response.status === 200) {
                 setEnabledTab("confirmation");
             }
-            console.log(data);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -78,11 +77,11 @@ export default function Onboarding() {
                 },
                 body: JSON.stringify({ code, email }),
             });
-            //If status code 200 then change tab
+            // If status code 200 then change tab
             if (response.status === 200) {
-                setEnabledTab("survey");
                 const data = await response.json();
-                setUserCookies(data.displayname, data.email, data.accessToken);
+                setUserCookies(data.username, data.displayname, data.email, data.accessToken);
+                router.push("/");
             }
         } catch (error) {
             console.error('Error:', error);
@@ -93,24 +92,22 @@ export default function Onboarding() {
     const onSendCode = () => {
         //Check email is valid
         if (email.includes("@") && email.includes(".") && email.length > 5) {
-            console.log("Email is valid")
             onSigninVerify();
         }
     }
 
     //Function for when user clicks submit Code button
     const onSubmitCode = () => {
-        if (code.length === 6&& email.includes("@") && email.includes(".") && email.length > 5) {
-            console.log("Code is valid");
+        if (code.length === 6 && email.includes("@") && email.includes(".") && email.length > 5) {
             onSignin();
         }
     }
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
-            
+
             <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center gap-4">
-                <AccountIndicator page="signin"/>
+                <AccountIndicator page="signin" />
                 <Tabs activationMode="automatic" value={currentTab} className="w-[400px]">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger disabled={emailTabDisabled} value="email">Email</TabsTrigger>
@@ -119,14 +116,14 @@ export default function Onboarding() {
                     <TabsContent value="email">
                         <Card>
                             <CardHeader>
-                
+
                                 <CardDescription>
                                     Enter the email associated with your account. We&apos;ll send you a code to confirm it&apos;s you.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-2">
                                 <div className="space-y-1">
-                                    
+
                                     <Input id="username" value={email} onChange={e => setEmail(e.target.value)} />
                                 </div>
                             </CardContent>
