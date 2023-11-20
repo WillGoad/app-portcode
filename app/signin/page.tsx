@@ -121,15 +121,20 @@ export default function Onboarding() {
                                     Enter the email associated with your account. We&apos;ll send you a code to confirm it&apos;s you.
                                 </CardDescription>
                             </CardHeader>
-                            <CardContent className="space-y-2">
-                                <div className="space-y-1">
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                onSendCode();
+                            }}>
+                                <CardContent className="space-y-2">
+                                    <div className="space-y-1">
 
-                                    <Input id="username" value={email} onChange={e => setEmail(e.target.value)} />
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button onClick={() => onSendCode()}>Send Code</Button>
-                            </CardFooter>
+                                        <Input id="username" value={email} onChange={e => setEmail(e.target.value)} />
+                                    </div>
+                                </CardContent>
+                                <CardFooter>
+                                    <Button type="submit">Send Code</Button>
+                                </CardFooter>
+                            </form>
                         </Card>
                     </TabsContent>
                     <TabsContent value="confirmation">
@@ -139,14 +144,19 @@ export default function Onboarding() {
                                     Enter the code we sent to your email. Make sure to check your spam folder.
                                 </CardDescription>
                             </CardHeader>
-                            <CardContent className="space-y-2">
-                                <div className="space-y-1">
-                                    <Input id="name" value={code} onChange={e => setCode(e.target.value)} />
-                                </div>
-                            </CardContent>
-                            <CardFooter>
-                                <Button onClick={() => onSubmitCode()}>Submit</Button>
-                            </CardFooter>
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                onSubmitCode();
+                            }}>
+                                <CardContent className="space-y-2">
+                                    <div className="space-y-1">
+                                        <Input id="name" value={code} onChange={e => setCode(e.target.value)} />
+                                    </div>
+                                </CardContent>
+                                <CardFooter>
+                                    <Button type="submit">Submit</Button>
+                                </CardFooter>
+                            </form>
                         </Card>
                     </TabsContent>
                 </Tabs>
