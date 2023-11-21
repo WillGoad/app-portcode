@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
+import fs from 'fs';
+import { Response } from 'node-fetch';
 
 import { useRouter } from 'next/navigation';
 
@@ -59,6 +61,7 @@ export default function LiveEditorPage() {
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [qrCode, setQrCode] = useState<string | null>(null);
   const [yourJWT, setYourJWT] = useState(Cookies.get('jwt'));
   const router = useRouter();
 
@@ -75,6 +78,7 @@ export default function LiveEditorPage() {
   useEffect(() => {
     if (yourJWT && yourJWT !== "") {
       onLoad();
+      fetchAndSaveQRCode();
     }
   }, [yourJWT]);
 
@@ -105,6 +109,44 @@ export default function LiveEditorPage() {
       }
     } catch (error) {
       console.error('Error:', error);
+    }
+  }
+
+  const fetchAndSaveQRCode = async () => {
+    const url = 'https://api.portco.de/api/qr-code';
+    try {
+      if (!yourJWT) {
+        throw new Error("No JWT found");
+      }
+      const response = await fetch(url, {
+        headers: {
+          'x-access-token': yourJWT,
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const base64data = reader.result;
+        setQrCode(String(base64data));
+      }
+      reader.readAsDataURL(blob);
+    } catch (error) {
+      if (!yourJWT) {
+        throw new Error("No JWT found");
+      }
+      console.log("No QR code found, generating one now...")
+      await fetch(url, { method: 'POST', headers: { 'x-access-token': yourJWT, } });
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const base64data = reader.result;
+        setQrCode(String(base64data));
+      }
+      reader.readAsDataURL(blob);
     }
   }
 
@@ -247,9 +289,7 @@ export default function LiveEditorPage() {
               </Form>
             </div>
             <div className="flex-1 flex flex-start items-center flex-col">
-              <div className="w-32 h-32 bg-black mb-6">
-                {/* This is where the QR code will go */}
-              </div>
+              {qrCode && <img src={qrCode} alt="QR Code" />}
               <h2 className="text-2xl font-bold mb-2">{displayName}</h2>
               <p className="text-gray-400 mb-6">@{username}</p>
               <div className="w-full sm:w-96">
