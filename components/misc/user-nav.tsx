@@ -20,10 +20,9 @@ import { deleteAllCookies } from '@lib/utils';
 interface UserNavProps {
     displayName: string
     email: string
-    handleLogout: () => void
 }
 
-export function UserNav({ displayName, email, handleLogout }: UserNavProps) {
+export function UserNav({ displayName, email }: UserNavProps) {
     const router = useRouter();
 
     const initials = displayName.split(" ").map((n) => n[0]).join("");
