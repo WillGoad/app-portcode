@@ -113,12 +113,11 @@ export default function LiveEditorPage() {
   }
 
   const fetchAndSaveQRCode = async () => {
-    const url = 'https://api.portco.de/api/qr-code';
     try {
       if (!yourJWT) {
         throw new Error("No JWT found");
       }
-      const response = await fetch(url, {
+      const response = await fetch('https://api.portco.de/api/qr-code', {
         headers: {
           'x-access-token': yourJWT,
         }
@@ -126,27 +125,10 @@ export default function LiveEditorPage() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const blob = await response.blob();
-      const reader = new FileReader();
-      reader.onloadend = function () {
-        const base64data = reader.result;
-        setQrCode(String(base64data));
-      }
-      reader.readAsDataURL(blob);
+      const { qrcodeuri } = await response.json();
+      setQrCode(qrcodeuri)
     } catch (error) {
-      if (!yourJWT) {
-        throw new Error("No JWT found");
-      }
-      console.log("No QR code found, generating one now...")
-      await fetch(url, { method: 'POST', headers: { 'x-access-token': yourJWT, } });
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const reader = new FileReader();
-      reader.onloadend = function () {
-        const base64data = reader.result;
-        setQrCode(String(base64data));
-      }
-      reader.readAsDataURL(blob);
+      console.error('Error:', error);
     }
   }
 
