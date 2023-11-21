@@ -17,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AccountIndicator } from "@/components/ui/account-indicator";
 
 import { setUserCookies } from "@lib/utils";
+import { toast } from "@/components/ui/use-toast";
 
 
 export default function Onboarding() {
@@ -62,10 +63,19 @@ export default function Onboarding() {
             });
             //If status code 200 then change tab
             if (response.status === 200) {
+                toast({
+                    title: "Code Sent",
+                    description: "We sent a code to your email. Make sure to check your spam folder.",
+                    duration: 5000,
+                })
                 setEnabledTab("confirmation");
             }
         } catch (error) {
-            console.error('Error:', error);
+            toast({
+                title: "Error sending code",
+                description: String(error),
+                duration: 5000,
+            })
         }
     }
 
@@ -80,12 +90,21 @@ export default function Onboarding() {
             });
             // If status code 200 then change tab
             if (response.status === 200) {
+                toast({
+                    title: "Welcome back",
+                    description: "You are now signed in.",
+                    duration: 5000,
+                })
                 const data = await response.json();
                 setUserCookies(data.username, data.displayname, data.email, data.accessToken);
                 router.push("/");
             }
         } catch (error) {
-            console.error('Error:', error);
+            toast({
+                title: "Error signing in",
+                description: String(error),
+                duration: 5000,
+            })
         }
     }
 

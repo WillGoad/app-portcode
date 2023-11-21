@@ -6,8 +6,6 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 
-import { useRouter } from 'next/navigation';
-
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -26,7 +24,7 @@ import { UserNav } from "@/components/misc/user-nav"
 import { HighlightedRepo } from "@/components/misc/highlighted-repo";
 import { ShowOffSection } from "@/components/misc/show-off-section";
 
-import { cn, deleteAllCookies } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 
 const profileFormSchema = z.object({
@@ -61,7 +59,6 @@ export default function LiveEditorPage() {
   const [email, setEmail] = useState("");
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [yourJWT, setYourJWT] = useState(Cookies.get('jwt'));
-  const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -107,7 +104,11 @@ export default function LiveEditorPage() {
         });
       }
     } catch (error) {
-      console.error('Error:', error);
+      toast({
+        title: "Error loading profile",
+        description: String(error),
+        duration: 5000
+      })
     }
   }
 
@@ -127,7 +128,11 @@ export default function LiveEditorPage() {
       const { qrcodeuri } = await response.json();
       setQrCode(qrcodeuri)
     } catch (error) {
-      console.error('Error:', error);
+      toast({
+        title: "Error loading QR Code",
+        description: String(error),
+        duration: 5000
+      })
     }
   }
 
@@ -146,30 +151,18 @@ export default function LiveEditorPage() {
       });
       //If status code 200 then change tab
       if (response.status === 200) {
-        onUpdateProfileSuccess();
-        return true;
+        toast({
+          description: "Succesfully updated profile",
+          duration: 1000
+        })
       }
     } catch (error) {
-      onUpdateProfileError();
-      return false;
+      toast({
+        title: "Error updating profile",
+        description: String(error),
+        duration: 5000
+      })
     }
-  }
-
-  const onUpdateProfileSuccess = () => {
-    console.log("Successfully updated profile!");
-  }
-
-  const onUpdateProfileError = () => {
-    console.log("Error updating profile!");
-  }
-
-  const onLogout = () => {
-    deleteAllCookies();
-    setYourJWT("");
-    setDisplayName("");
-    setUsername("");
-    setEmail("");
-    router.push("/signin"); // Refresh the page
   }
 
   const form = useForm<ProfileFormValues>({
@@ -183,22 +176,6 @@ export default function LiveEditorPage() {
     control: form.control,
   })
 
-  async function onSubmit(data: ProfileFormValues) {
-    const updateSuccess = await onUpdateProfile();
-    if (updateSuccess) {
-      toast({
-        description: "Succesfully updated profile",
-        duration: 1000
-      })
-    } else {
-      toast({
-        description: "Error updating profile",
-        duration: 1000
-      })
-    }
-
-  }
-
   return (
     <>
       <div className="flex-col md:flex">
@@ -206,7 +183,7 @@ export default function LiveEditorPage() {
           <div className="flex h-16 items-center px-4">
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
-              <UserNav displayName={displayName} email={email} handleLogout={onLogout} />
+              <UserNav displayName={displayName} email={email} />
             </div>
           </div>
         </div>
@@ -223,7 +200,7 @@ export default function LiveEditorPage() {
           <div className="flex space-x-4 h-screen">
             <div className="flex-1">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={form.handleSubmit(onUpdateProfile)} className="space-y-8">
                   <FormField
                     control={form.control}
                     name="highlightedRepo"

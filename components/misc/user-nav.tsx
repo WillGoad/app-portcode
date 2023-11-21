@@ -1,7 +1,8 @@
+import { useRouter } from 'next/navigation';
+
 import {
     Avatar,
     AvatarFallback,
-    AvatarImage,
 } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,6 +15,7 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { deleteAllCookies } from '@lib/utils';
 
 interface UserNavProps {
     displayName: string
@@ -22,7 +24,14 @@ interface UserNavProps {
 }
 
 export function UserNav({ displayName, email, handleLogout }: UserNavProps) {
+    const router = useRouter();
+
     const initials = displayName.split(" ").map((n) => n[0]).join("");
+
+    const onLogout = () => {
+        deleteAllCookies();
+        router.push("/signin"); // Refresh the page
+      }
 
     return (
         <DropdownMenu>
@@ -59,7 +68,7 @@ export function UserNav({ displayName, email, handleLogout }: UserNavProps) {
                     <DropdownMenuItem>New Team</DropdownMenuItem>
                 </DropdownMenuGroup> */}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleLogout()}>
+                <DropdownMenuItem onClick={() => onLogout()}>
                     Log out
                     <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
