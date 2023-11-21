@@ -5,8 +5,6 @@ import Cookies from 'js-cookie';
 import { useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import fs from 'fs';
-import { Response } from 'node-fetch';
 
 import { useRouter } from 'next/navigation';
 
@@ -21,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 
 import { MainNav } from "@/components/misc/main-nav"
 import { UserNav } from "@/components/misc/user-nav"
@@ -64,6 +62,7 @@ export default function LiveEditorPage() {
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [yourJWT, setYourJWT] = useState(Cookies.get('jwt'));
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     Cookies.get('user-token') && setYourJWT(Cookies.get('user-token'));
@@ -148,9 +147,11 @@ export default function LiveEditorPage() {
       //If status code 200 then change tab
       if (response.status === 200) {
         onUpdateProfileSuccess();
+        return true;
       }
     } catch (error) {
       onUpdateProfileError();
+      return false;
     }
   }
 
@@ -182,15 +183,20 @@ export default function LiveEditorPage() {
     control: form.control,
   })
 
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  async function onSubmit(data: ProfileFormValues) {
+    const updateSuccess = await onUpdateProfile();
+    if (updateSuccess) {
+      toast({
+        description: "Succesfully updated profile",
+        duration: 1000
+      })
+    } else {
+      toast({
+        description: "Error updating profile",
+        duration: 1000
+      })
+    }
+
   }
 
   return (
@@ -266,7 +272,7 @@ export default function LiveEditorPage() {
                       Add Experience
                     </Button>
                   </div>
-                  <Button type="submit" onClick={() => onUpdateProfile()}>Update profile</Button>
+                  <Button type="submit">Update profile</Button>
                 </form>
               </Form>
             </div>

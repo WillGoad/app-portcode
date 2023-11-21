@@ -29,7 +29,6 @@ export function UserNav({ displayName, email, handleLogout }: UserNavProps) {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src="/avatars/01.png" alt="@shadcn" />
                         <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>
                 </Button>
@@ -43,7 +42,7 @@ export function UserNav({ displayName, email, handleLogout }: UserNavProps) {
                         </p>
                     </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                {/* <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
                         Profile
@@ -58,7 +57,7 @@ export function UserNav({ displayName, email, handleLogout }: UserNavProps) {
                         <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                     </DropdownMenuItem>
                     <DropdownMenuItem>New Team</DropdownMenuItem>
-                </DropdownMenuGroup>
+                </DropdownMenuGroup> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => handleLogout()}>
                     Log out
