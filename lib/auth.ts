@@ -1,5 +1,7 @@
-import type { NextRequest } from 'next/server'
 import { jwtVerify } from 'jose'
+
+import type { NextRequest } from 'next/server'
+
 import { USER_TOKEN, getJwtSecretKey } from './constants'
 
 

@@ -1,8 +1,9 @@
 'use client';
 
-//Convert to client component
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -13,8 +14,8 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useSearchParams } from 'next/navigation'
 import { AccountIndicator } from "@/components/ui/account-indicator";
+
 import { setUserCookies } from "@lib/utils";
 
 

@@ -1,15 +1,14 @@
 'use client';
-import Cookies from 'js-cookie';
-import { Button } from "@/components/ui/button"
-import { MainNav } from "@/components/misc/main-nav"
-import { UserNav } from "@/components/misc/user-nav"
-import { useRouter } from 'next/navigation';
 
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
 import { useFieldArray, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 
-import { cn, deleteAllCookies } from "@/lib/utils"
+import { useRouter } from 'next/navigation';
+
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -21,10 +20,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
+
+import { MainNav } from "@/components/misc/main-nav"
+import { UserNav } from "@/components/misc/user-nav"
 import { HighlightedRepo } from "@/components/misc/highlighted-repo";
 import { ShowOffSection } from "@/components/misc/show-off-section";
-import { useEffect, useState } from "react";
 
+import { cn, deleteAllCookies } from "@/lib/utils";
 
 
 const profileFormSchema = z.object({
@@ -174,7 +176,7 @@ export default function LiveEditorPage() {
           <div className="flex h-16 items-center px-4">
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
-              <UserNav displayName={displayName} email={email} handleLogout={onLogout}/>
+              <UserNav displayName={displayName} email={email} handleLogout={onLogout} />
             </div>
           </div>
         </div>
